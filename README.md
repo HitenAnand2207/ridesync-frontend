@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RideSync Frontend
 
-## Getting Started
+RideSync is a campus ride-sharing platform built for KIIT University students. It lets students offer empty seats on their planned trips and find rides that match their route, saving money and reducing solo travel. The frontend is a Next.js 14 application that communicates with the RideSync REST API.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Smart Ride Matching**: Search for rides by origin, destination, date and seats needed. Each result gets a match score (0–100) based on text similarity, geographic proximity, departure time closeness and seat availability — so the best rides always appear first.
+- **Offer a Ride**: Drivers can list rides with origin, destination, departure time, available seats and price per seat. The ride is instantly searchable by other students.
+- **Book a Seat**: Passengers can book one or more seats on any active ride. The system prevents double-booking, blocks drivers from booking their own rides, and atomically decrements available seats to avoid race conditions.
+- **My Rides**: Drivers can view all rides they have offered, see booking counts, and cancel active rides.
+- **My Bookings**: Passengers can view all their bookings with ride details and driver contact info, and cancel confirmed bookings.
+- **Authentication**: Full JWT-based auth with access tokens (15 min) and refresh tokens (7 days). Tokens are silently refreshed in the background — users stay logged in without interruption.
+- **Real-time Notifications**: Booking confirmations and cancellations trigger background jobs that save in-app notifications and send emails via the backend worker.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How It Works
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. User registers or logs in — a JWT access token is stored in localStorage and a refresh token is set as an httpOnly cookie.
+2. Every API request automatically attaches the access token via an Axios interceptor.
+3. If a request returns 401 (token expired), the interceptor silently calls `/auth/refresh`, stores the new token, and retries the original request — all without the user noticing.
+4. On the search page, the frontend hits the `/api/match` endpoint which returns rides ranked by a scoring engine combining text match, geo distance (Haversine formula) and time proximity.
+5. Booking a ride triggers a BullMQ job on the backend that sends a confirmation email and saves an in-app notification asynchronously.
+6. Cancelling a ride or booking atomically restores available seats via a database transaction.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **HTTP Client**: Axios with request/response interceptors
+- **Auth State**: React Context API with localStorage persistence
+- **Notifications**: react-hot-toast
+- **Icons**: lucide-react
+- **Deployment**: Azure App Service + GitHub Actions CI/CD
