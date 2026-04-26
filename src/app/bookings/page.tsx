@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import { Booking } from '@/types';
 import toast from 'react-hot-toast';
-import { MapPin, Clock, Users } from 'lucide-react';
+import { MapPin, Clock, Users, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function BookingsPage() {
@@ -35,67 +35,106 @@ export default function BookingsPage() {
     }
   };
 
-  if (loading) return <div className="text-center py-20 text-gray-500">Loading...</div>;
+  const statusStyle = (status: string) => ({
+    fontSize: '11px', fontWeight: 600,
+    padding: '4px 10px', borderRadius: '20px',
+    background: status === 'CONFIRMED' ? '#dcfce7' : status === 'PENDING' ? '#fef9c3' : '#fee2e2',
+    color: status === 'CONFIRMED' ? '#15803d' : status === 'PENDING' ? '#92400e' : '#991b1b',
+  });
+
+  if (loading) return (
+    <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>Loading...</div>
+  );
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">My Bookings</h1>
+    <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+      <h1 style={{
+        fontFamily: 'var(--font-display)',
+        fontSize: '36px', fontWeight: 400,
+        color: 'var(--text-primary)', marginBottom: '28px',
+        letterSpacing: '-0.02em',
+      }}>
+        My bookings
+      </h1>
 
       {bookings.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <p className="text-lg mb-4">You haven't booked any rides yet.</p>
-          <Link href="/rides/search" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        <div style={{
+          textAlign: 'center', padding: '4rem',
+          background: 'var(--bg-card)', border: '1px solid var(--border)',
+          borderRadius: '16px',
+        }}>
+          <p style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: 500 }}>
+            No bookings yet
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px' }}>
+            Find a ride and book your first seat.
+          </p>
+          <Link href="/rides/search" style={{
+            padding: '10px 20px', background: 'var(--accent)',
+            color: '#fff', borderRadius: '8px', textDecoration: 'none',
+            fontSize: '14px', fontWeight: 600,
+          }}>
             Find a ride
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {bookings.map((booking) => (
-            <div key={booking.id} className="bg-white border border-gray-200 rounded-xl p-6">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2 font-semibold text-gray-900">
-                  <MapPin size={16} className="text-blue-600" />
-                  {booking.ride.origin} → {booking.ride.destination}
+            <div key={booking.id} style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '14px', padding: '22px 24px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MapPin size={15} color="var(--accent)" />
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {booking.ride.origin}
+                  </span>
+                  <ArrowRight size={13} color="var(--text-muted)" />
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {booking.ride.destination}
+                  </span>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                  booking.status === 'CONFIRMED' ? 'bg-green-100 text-green-700' :
-                  booking.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-red-100 text-red-700'
-                }`}>
-                  {booking.status}
-                </span>
+                <span style={statusStyle(booking.status)}>{booking.status}</span>
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span className="flex items-center gap-1">
-                  <Clock size={14} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  <Clock size={13} />
                   {new Date(booking.ride.departureTime).toLocaleString()}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Users size={14} />
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  <Users size={13} />
                   {booking.seats} seat{booking.seats > 1 ? 's' : ''}
                 </span>
-                <span className="font-medium text-blue-600">
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)' }}>
                   ₹{booking.ride.pricePerSeat * booking.seats} total
                 </span>
               </div>
 
-              <div className="text-sm text-gray-600 mb-4">
-                Driver: <span className="font-medium">{booking.ride.driver.name}</span>
+              <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                Driver: <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>
+                  {booking.ride.driver.name}
+                </span>
                 {booking.ride.driver.phone && (
-                  <span className="ml-2 text-gray-500">· {booking.ride.driver.phone}</span>
+                  <span style={{ marginLeft: '8px' }}>· {booking.ride.driver.phone}</span>
                 )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <Link href={`/rides/${booking.rideId}`} className="text-sm text-blue-600 hover:underline">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
+                <Link href={`/rides/${booking.rideId}`} style={{
+                  fontSize: '13px', color: 'var(--accent)',
+                  textDecoration: 'none', fontWeight: 500,
+                }}>
                   View ride
                 </Link>
                 {booking.status === 'CONFIRMED' && (
-                  <button
-                    onClick={() => handleCancel(booking.id)}
-                    className="text-sm text-red-500 hover:text-red-700"
-                  >
+                  <button onClick={() => handleCancel(booking.id)} style={{
+                    fontSize: '13px', color: '#dc2626',
+                    background: 'none', border: 'none',
+                    cursor: 'pointer', fontWeight: 500,
+                  }}>
                     Cancel booking
                   </button>
                 )}
