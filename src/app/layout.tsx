@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import { Toaster } from 'react-hot-toast';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'RideSync — Campus Ride Sharing',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <AuthProvider>
+          <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
           <Navbar />
           <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem' }}>
             {children}
