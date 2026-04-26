@@ -37,95 +37,104 @@ export default function CreateRidePage() {
     }
   };
 
+  const inputStyle = {
+    width: '100%',
+    padding: '10px 14px',
+    border: '1px solid var(--border-input)',
+    borderRadius: '8px',
+    fontSize: '14px',
+    color: 'var(--text-primary)',
+    background: 'var(--bg-card)',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+    marginBottom: '6px',
+  };
+
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-3 mb-8">
-        <Car size={32} className="text-blue-600" />
-        <h1 className="text-3xl font-bold text-gray-900">Offer a Ride</h1>
+    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+        <div style={{
+          width: '42px', height: '42px', background: 'var(--accent-light)',
+          borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Car size={20} color="var(--accent)" />
+        </div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '32px', fontWeight: 400,
+          color: 'var(--text-primary)', letterSpacing: '-0.02em',
+        }}>
+          Offer a ride
+        </h1>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-8">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div style={{
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border)',
+        borderRadius: '16px', padding: '32px',
+      }}>
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
-              <input
-                type="text"
-                value={form.origin}
+              <label style={labelStyle}>From</label>
+              <input type="text" value={form.origin}
                 onChange={(e) => setForm({ ...form, origin: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="KIIT University"
-                required
-              />
+                style={inputStyle} placeholder="KIIT University" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
-              <input
-                type="text"
-                value={form.destination}
+              <label style={labelStyle}>To</label>
+              <input type="text" value={form.destination}
                 onChange={(e) => setForm({ ...form, destination: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Bhubaneswar Airport"
-                required
-              />
+                style={inputStyle} placeholder="Bhubaneswar Airport" required />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Departure Time</label>
-            <input
-              type="datetime-local"
-              value={form.departureTime}
+          <div style={{ marginBottom: '14px' }}>
+            <label style={labelStyle}>Departure date & time</label>
+            <input type="datetime-local" value={form.departureTime}
               onChange={(e) => setForm({ ...form, departureTime: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              style={inputStyle} required />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Total Seats</label>
-              <input
-                type="number"
-                min="1"
-                max="6"
-                value={form.totalSeats}
+              <label style={labelStyle}>Total seats</label>
+              <input type="number" min="1" max="6" value={form.totalSeats}
                 onChange={(e) => setForm({ ...form, totalSeats: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+                style={inputStyle} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price per Seat (₹)</label>
-              <input
-                type="number"
-                min="0"
-                value={form.pricePerSeat}
+              <label style={labelStyle}>Price per seat (₹)</label>
+              <input type="number" min="0" value={form.pricePerSeat}
                 onChange={(e) => setForm({ ...form, pricePerSeat: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="150"
-                required
-              />
+                style={inputStyle} placeholder="150" required />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
-            <textarea
-              value={form.description}
+          <div style={{ marginBottom: '24px' }}>
+            <label style={labelStyle}>Description (optional)</label>
+            <textarea value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={3}
-              placeholder="Any additional details about the ride..."
-            />
+              style={{ ...inputStyle, resize: 'vertical', minHeight: '90px', fontFamily: 'inherit' }}
+              placeholder="Any additional details about the ride..." />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
-          >
-            {loading ? 'Creating...' : 'Create Ride'}
+          <button type="submit" disabled={loading} style={{
+            width: '100%', padding: '12px',
+            background: 'var(--accent)', color: '#ffffff',
+            border: 'none', borderRadius: '8px',
+            fontSize: '14px', fontWeight: 600,
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.7 : 1,
+          }}>
+            {loading ? 'Creating...' : 'Create ride'}
           </button>
         </form>
       </div>
