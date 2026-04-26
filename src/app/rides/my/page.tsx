@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import api from '@/lib/axios';
 import { Ride } from '@/types';
 import toast from 'react-hot-toast';
-import { MapPin, Clock, Users, Plus } from 'lucide-react';
+import { MapPin, Clock, Users, Plus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MyRidesPage() {
@@ -35,65 +35,106 @@ export default function MyRidesPage() {
     }
   };
 
-  if (loading) return <div className="text-center py-20 text-gray-500">Loading...</div>;
+  const statusStyle = (status: string) => ({
+    fontSize: '11px', fontWeight: 600,
+    padding: '4px 10px', borderRadius: '20px',
+    background: status === 'ACTIVE' ? '#dcfce7' : status === 'FULL' ? '#fef9c3' : status === 'COMPLETED' ? '#dbeafe' : '#fee2e2',
+    color: status === 'ACTIVE' ? '#15803d' : status === 'FULL' ? '#92400e' : status === 'COMPLETED' ? '#1d4ed8' : '#991b1b',
+  });
+
+  if (loading) return (
+    <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>Loading...</div>
+  );
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">My Rides</h1>
-        <Link href="/rides/create" className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
-          <Plus size={16} />
-          New Ride
+    <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px' }}>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '36px', fontWeight: 400,
+          color: 'var(--text-primary)', letterSpacing: '-0.02em',
+        }}>
+          My rides
+        </h1>
+        <Link href="/rides/create" style={{
+          display: 'flex', alignItems: 'center', gap: '6px',
+          padding: '9px 18px', background: 'var(--accent)',
+          color: '#ffffff', borderRadius: '8px',
+          fontSize: '13px', fontWeight: 600, textDecoration: 'none',
+        }}>
+          <Plus size={15} /> New ride
         </Link>
       </div>
 
       {rides.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <p className="text-lg mb-4">You haven't offered any rides yet.</p>
-          <Link href="/rides/create" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+        <div style={{
+          textAlign: 'center', padding: '4rem',
+          background: 'var(--bg-card)', border: '1px solid var(--border)',
+          borderRadius: '16px',
+        }}>
+          <p style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: 500 }}>
+            No rides offered yet
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px' }}>
+            Going somewhere? Share your ride and split the cost.
+          </p>
+          <Link href="/rides/create" style={{
+            padding: '10px 20px', background: 'var(--accent)',
+            color: '#fff', borderRadius: '8px', textDecoration: 'none',
+            fontSize: '14px', fontWeight: 600,
+          }}>
             Offer your first ride
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {rides.map((ride) => (
-            <div key={ride.id} className="bg-white border border-gray-200 rounded-xl p-6">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2 font-semibold text-gray-900">
-                  <MapPin size={16} className="text-blue-600" />
-                  {ride.origin} → {ride.destination}
+            <div key={ride.id} style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: '14px', padding: '22px 24px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MapPin size={15} color="var(--accent)" />
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {ride.origin}
+                  </span>
+                  <ArrowRight size={13} color="var(--text-muted)" />
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {ride.destination}
+                  </span>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                  ride.status === 'ACTIVE' ? 'bg-green-100 text-green-700' :
-                  ride.status === 'FULL' ? 'bg-yellow-100 text-yellow-700' :
-                  ride.status === 'COMPLETED' ? 'bg-blue-100 text-blue-700' :
-                  'bg-red-100 text-red-700'
-                }`}>
-                  {ride.status}
-                </span>
+                <span style={statusStyle(ride.status)}>{ride.status}</span>
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                <span className="flex items-center gap-1">
-                  <Clock size={14} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  <Clock size={13} />
                   {new Date(ride.departureTime).toLocaleString()}
                 </span>
-                <span className="flex items-center gap-1">
-                  <Users size={14} />
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  <Users size={13} />
                   {ride.availableSeats}/{ride.totalSeats} seats
                 </span>
-                <span className="font-medium text-blue-600">₹{ride.pricePerSeat}/seat</span>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)' }}>
+                  ₹{ride.pricePerSeat}/seat
+                </span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <Link href={`/rides/${ride.id}`} className="text-sm text-blue-600 hover:underline">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
+                <Link href={`/rides/${ride.id}`} style={{
+                  fontSize: '13px', color: 'var(--accent)',
+                  textDecoration: 'none', fontWeight: 500,
+                }}>
                   View details
                 </Link>
                 {ride.status === 'ACTIVE' && (
-                  <button
-                    onClick={() => handleCancel(ride.id)}
-                    className="text-sm text-red-500 hover:text-red-700"
-                  >
+                  <button onClick={() => handleCancel(ride.id)} style={{
+                    fontSize: '13px', color: '#dc2626',
+                    background: 'none', border: 'none',
+                    cursor: 'pointer', fontWeight: 500,
+                  }}>
                     Cancel ride
                   </button>
                 )}
