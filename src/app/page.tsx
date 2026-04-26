@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const CityIllustration = () => (
   <svg viewBox="0 0 600 320" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', maxWidth: '640px' }}>
@@ -132,20 +132,7 @@ const MapIllustration = () => (
   </svg>
 );
 
-const RatingIllustration = () => (
-  <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%' }}>
-    <rect width="280" height="200" fill="var(--bg-secondary)" rx="12" />
-    <circle cx="140" cy="72" r="40" fill="#fef9c3" stroke="#fde047" strokeWidth="2" />
-    <text x="140" y="80" textAnchor="middle" fontSize="32">😊</text>
-    <text x="140" y="132" textAnchor="middle" fontSize="13" fill="var(--text-primary)" fontWeight="600">4.9 rating</text>
-    <g transform="translate(98, 144)">
-      {[0,1,2,3,4].map(i => (
-        <text key={i} x={i * 18} y="16" fontSize="14" fill="#fbbf24">★</text>
-      ))}
-    </g>
-    <text x="140" y="176" textAnchor="middle" fontSize="11" fill="var(--text-muted)">2,400+ rides completed</text>
-  </svg>
-);
+
 
 export default function Home() {
   const { user } = useAuth();
@@ -241,29 +228,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Social proof */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '32px' }}>
-            <div style={{ display: 'flex' }}>
-              {['H', 'N', 'A', 'R'].map((l, i) => (
-                <div key={i} style={{
-                  width: '32px', height: '32px', borderRadius: '50%',
-                  background: ['#bfdbfe','#bbf7d0','#fde68a','#fecaca'][i],
-                  border: '2px solid var(--bg)',
-                  marginLeft: i > 0 ? '-8px' : '0',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '12px', fontWeight: 600, color: '#374151',
-                }}>{l}</div>
-              ))}
-            </div>
-            <div>
-              <div style={{ display: 'flex', gap: '2px' }}>
-                {[1,2,3,4,5].map(i => <Star key={i} size={13} fill="#fbbf24" color="#fbbf24" />)}
-              </div>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Loved by 500+ KIIT students
-              </p>
-            </div>
-          </div>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -309,26 +273,37 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Feature card 2 */}
-          <div style={{
-            background: 'var(--bg-card)', border: '1px solid var(--border)',
-            borderRadius: '16px', padding: '32px',
-          }}>
-            <div style={{ marginBottom: '24px' }}>
-              <RatingIllustration />
-            </div>
-            <h3 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '22px', fontWeight: 400,
-              color: 'var(--text-primary)', marginBottom: '8px',
-            }}>
-              Trusted community
-            </h3>
-            <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
-              Only verified KIIT students join the platform. Rate your driver after every ride and build a trusted network.
-            </p>
-          </div>
-
+         {/* Feature card 2 */}
+                <div style={{
+                  background: 'var(--bg-card)', border: '1px solid var(--border)',
+                  borderRadius: '16px', padding: '32px',
+                }}>
+                  <div style={{ marginBottom: '24px' }}>
+                    <svg viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%' }}>
+                      <rect width="280" height="200" fill="var(--bg-secondary)" rx="12" />
+                      <path d="M140 30 L190 55 L190 110 Q190 150 140 175 Q90 150 90 110 L90 55 Z" fill="#bbf7d0" stroke="#16a34a" strokeWidth="2" />
+                      <path d="M115 105 L132 122 L165 89" stroke="#16a34a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                      <circle cx="60" cy="60" r="18" fill="#bfdbfe" opacity="0.6" />
+                      <circle cx="220" cy="60" r="18" fill="#bfdbfe" opacity="0.6" />
+                      <circle cx="60" cy="150" r="18" fill="#bfdbfe" opacity="0.6" />
+                      <circle cx="220" cy="150" r="18" fill="#bfdbfe" opacity="0.6" />
+                      <line x1="78" y1="65" x2="90" y2="80" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.5" />
+                      <line x1="202" y1="65" x2="190" y2="80" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.5" />
+                      <line x1="78" y1="145" x2="90" y2="130" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.5" />
+                      <line x1="202" y1="145" x2="190" y2="130" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.5" />
+                    </svg>
+                  </div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '22px', fontWeight: 400,
+                    color: 'var(--text-primary)', marginBottom: '8px',
+                  }}>
+                    Campus verified
+                  </h3>
+                  <p style={{ fontSize: '15px', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
+                    Only KIIT students can join. Every account is tied to a university email keeping the community safe and trusted.
+                  </p>
+                </div>
           {/* Wide feature card */}
           <div style={{
             gridColumn: '1 / -1',
