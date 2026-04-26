@@ -4,8 +4,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Car } from 'lucide-react';
+import { Car, Mail, Lock, User, Phone } from 'lucide-react';
 import api from '@/lib/axios';
+
+const inputStyle = {
+  width: '100%',
+  padding: '10px 12px 10px 38px',
+  borderRadius: '8px',
+  border: '1px solid #e2e8f0',
+  fontSize: '14px',
+  color: '#0f172a',
+  background: '#ffffff',
+  outline: 'none',
+  boxSizing: 'border-box' as const,
+};
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -26,73 +38,72 @@ export default function RegisterPage() {
     }
   };
 
+  const fields = [
+    { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: <User size={15} color="#94a3b8" /> },
+    { key: 'email', label: 'Email', type: 'email', placeholder: 'you@kiit.ac.in', icon: <Mail size={15} color="#94a3b8" /> },
+    { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: <Phone size={15} color="#94a3b8" /> },
+    { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: <Lock size={15} color="#94a3b8" /> },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center -mt-8">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Car size={48} className="text-blue-600 mx-auto mb-2" />
-          <h1 className="text-2xl font-bold text-gray-900">Join RideSync</h1>
-          <p className="text-gray-600">Create your account and start sharing rides</p>
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: '100%', maxWidth: '400px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{
+            width: '48px', height: '48px', background: '#eef2ff', borderRadius: '12px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
+          }}>
+            <Car size={24} color="#4f46e5" />
+          </div>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0f172a', marginBottom: '6px' }}>
+            Create your account
+          </h1>
+          <p style={{ fontSize: '14px', color: '#64748b' }}>
+            Join thousands of KIIT students
+          </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Hiten Anand"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="you@kiit.ac.in"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone (optional)</label>
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="+91 98765 43210"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input
-                type="password"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? 'Creating account...' : 'Create Account'}
+        <div style={{
+          background: '#ffffff', border: '1px solid #e2e8f0',
+          borderRadius: '16px', padding: '32px',
+        }}>
+          <form onSubmit={handleSubmit}>
+            {fields.map(({ key, label, type, placeholder, icon }) => (
+              <div key={key} style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                  {label}
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}>
+                    {icon}
+                  </span>
+                  <input
+                    type={type}
+                    value={form[key as keyof typeof form]}
+                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                    style={inputStyle}
+                    placeholder={placeholder}
+                    required={key !== 'phone'}
+                  />
+                </div>
+              </div>
+            ))}
+
+            <button type="submit" disabled={loading} style={{
+              width: '100%', padding: '11px', marginTop: '8px',
+              background: loading ? '#818cf8' : '#4f46e5',
+              color: '#ffffff', border: 'none',
+              borderRadius: '8px', fontSize: '14px', fontWeight: 600,
+              cursor: loading ? 'not-allowed' : 'pointer',
+            }}>
+              {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-600 mt-4">
+          <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', marginTop: '20px' }}>
             Already have an account?{' '}
-            <Link href="/login" className="text-blue-600 hover:underline">
-              Login
+            <Link href="/login" style={{ color: '#4f46e5', fontWeight: 500, textDecoration: 'none' }}>
+              Sign in
             </Link>
           </p>
         </div>
