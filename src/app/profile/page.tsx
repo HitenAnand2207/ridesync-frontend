@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { User, Mail, Phone } from 'lucide-react';
+import { User, Mail, Phone, Shield } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -13,47 +13,81 @@ export default function ProfilePage() {
     if (!loading && !user) router.push('/login');
   }, [user, loading]);
 
-  if (loading || !user) return <div className="text-center py-20 text-gray-500">Loading...</div>;
+  if (loading || !user) return (
+    <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>Loading...</div>
+  );
 
   return (
-    <div className="max-w-xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Profile</h1>
+    <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+      <h1 style={{
+        fontFamily: 'var(--font-display)',
+        fontSize: '36px', fontWeight: 400,
+        color: 'var(--text-primary)', marginBottom: '28px',
+        letterSpacing: '-0.02em',
+      }}>
+        Profile
+      </h1>
 
-      <div className="bg-white border border-gray-200 rounded-xl p-8">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-2xl">
+      <div style={{
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border)',
+        borderRadius: '16px', overflow: 'hidden',
+      }}>
+        {/* Avatar header */}
+        <div style={{
+          padding: '32px', background: 'var(--bg-secondary)',
+          borderBottom: '1px solid var(--border)',
+          display: 'flex', alignItems: 'center', gap: '16px',
+        }}>
+          <div style={{
+            width: '56px', height: '56px', borderRadius: '50%',
+            background: 'var(--accent-light)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '22px', fontWeight: 700, color: 'var(--accent)',
+            flexShrink: 0,
+          }}>
             {user.name[0]}
           </div>
           <div>
-            <div className="text-xl font-bold text-gray-900">{user.name}</div>
-            <div className="text-sm text-gray-500">KIIT Student</div>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
+              {user.name}
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              KIIT University student
+            </div>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <User size={18} className="text-blue-600" />
-            <div>
-              <div className="text-xs text-gray-500">Full Name</div>
-              <div className="font-medium text-gray-900">{user.name}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-            <Mail size={18} className="text-blue-600" />
-            <div>
-              <div className="text-xs text-gray-500">Email</div>
-              <div className="font-medium text-gray-900">{user.email}</div>
-            </div>
-          </div>
-          {user.phone && (
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <Phone size={18} className="text-blue-600" />
+        {/* Details */}
+        <div style={{ padding: '24px 32px' }}>
+          {[
+            { icon: <User size={16} color="var(--accent)" />, label: 'Full name', value: user.name },
+            { icon: <Mail size={16} color="var(--accent)" />, label: 'Email', value: user.email },
+            ...(user.phone ? [{ icon: <Phone size={16} color="var(--accent)" />, label: 'Phone', value: user.phone }] : []),
+          ].map(({ icon, label, value }) => (
+            <div key={label} style={{
+              display: 'flex', alignItems: 'center', gap: '14px',
+              padding: '14px 16px', background: 'var(--bg-secondary)',
+              borderRadius: '10px', marginBottom: '10px',
+            }}>
+              {icon}
               <div>
-                <div className="text-xs text-gray-500">Phone</div>
-                <div className="font-medium text-gray-900">{user.phone}</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px' }}>{label}</div>
+                <div style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)' }}>{value}</div>
               </div>
             </div>
-          )}
+          ))}
+
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            marginTop: '16px', padding: '12px 16px',
+            background: 'var(--accent-light)', borderRadius: '10px',
+          }}>
+            <Shield size={15} color="var(--accent)" />
+            <span style={{ fontSize: '13px', color: 'var(--accent-text)', fontWeight: 500 }}>
+              Verified KIIT student
+            </span>
+          </div>
         </div>
       </div>
     </div>
