@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import { Toaster } from 'react-hot-toast';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'RideSync — Campus Ride Sharing',
@@ -15,13 +12,25 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <AuthProvider>
           <Navbar />
-          <main className="max-w-6xl mx-auto px-4 py-8">
+          <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem' }}>
             {children}
           </main>
-          <Toaster position="top-right" />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: 'var(--bg-card)',
+                color: 'var(--text-primary)',
+                border: '1px solid var(--border)',
+                borderRadius: '10px',
+                fontSize: '14px',
+                fontFamily: 'var(--font-body)',
+              },
+            }}
+          />
         </AuthProvider>
       </body>
     </html>
