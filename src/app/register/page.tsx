@@ -11,10 +11,10 @@ const inputStyle = {
   width: '100%',
   padding: '10px 12px 10px 38px',
   borderRadius: '8px',
-  border: '1px solid #e2e8f0',
+  border: '1px solid var(--border-input)',
   fontSize: '14px',
-  color: '#0f172a',
-  background: '#ffffff',
+  color: 'var(--text-primary)',
+  background: 'var(--bg-card)',
   outline: 'none',
   boxSizing: 'border-box' as const,
 };
@@ -29,8 +29,8 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await api.post('/auth/register', form);
-      toast.success('Account created! Please login.');
-      router.push('/login');
+      toast.success('Account created! Check your KIIT email for the OTP.');
+      router.push(`/verify-email?email=${encodeURIComponent(form.email)}`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Registration failed');
     } finally {
@@ -39,10 +39,10 @@ export default function RegisterPage() {
   };
 
   const fields = [
-    { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: <User size={15} color="#94a3b8" /> },
-    { key: 'email', label: 'Email', type: 'email', placeholder: 'you@kiit.ac.in', icon: <Mail size={15} color="#94a3b8" /> },
-    { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: <Phone size={15} color="#94a3b8" /> },
-    { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: <Lock size={15} color="#94a3b8" /> },
+    { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: <User size={15} color="var(--text-muted)" /> },
+    { key: 'email', label: 'Email', type: 'email', placeholder: 'you@kiit.ac.in', icon: <Mail size={15} color="var(--text-muted)" /> },
+    { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: <Phone size={15} color="var(--text-muted)" /> },
+    { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: <Lock size={15} color="var(--text-muted)" /> },
   ];
 
   return (
@@ -50,31 +50,43 @@ export default function RegisterPage() {
       <div style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{
-            width: '48px', height: '48px', background: '#eef2ff', borderRadius: '12px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
+            width: '48px', height: '48px',
+            background: 'var(--accent-light)',
+            borderRadius: '12px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 16px',
           }}>
-            <Car size={24} color="#4f46e5" />
+            <Car size={24} color="var(--accent)" />
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#0f172a', marginBottom: '6px' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
             Create your account
           </h1>
-          <p style={{ fontSize: '14px', color: '#64748b' }}>
-            Join thousands of KIIT students
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+            Join KIIT students on RideSync
           </p>
         </div>
 
         <div style={{
-          background: '#ffffff', border: '1px solid #e2e8f0',
-          borderRadius: '16px', padding: '32px',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border)',
+          borderRadius: '16px',
+          padding: '32px',
         }}>
           <form onSubmit={handleSubmit}>
             {fields.map(({ key, label, type, placeholder, icon }) => (
               <div key={key} style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
+                <label style={{
+                  display: 'block', fontSize: '13px',
+                  fontWeight: 500, color: 'var(--text-secondary)',
+                  marginBottom: '6px',
+                }}>
                   {label}
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}>
+                  <span style={{
+                    position: 'absolute', left: '12px',
+                    top: '50%', transform: 'translateY(-50%)',
+                  }}>
                     {icon}
                   </span>
                   <input
@@ -89,20 +101,31 @@ export default function RegisterPage() {
               </div>
             ))}
 
-            <button type="submit" disabled={loading} style={{
-              width: '100%', padding: '11px', marginTop: '8px',
-              background: loading ? '#818cf8' : '#4f46e5',
-              color: '#ffffff', border: 'none',
-              borderRadius: '8px', fontSize: '14px', fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
+            <p style={{
+              fontSize: '12px', color: 'var(--text-muted)',
+              textAlign: 'center', marginBottom: '12px', marginTop: '4px',
             }}>
+              Only <strong style={{ color: 'var(--text-secondary)' }}>@kiit.ac.in</strong> emails are accepted
+            </p>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '11px',
+                background: loading ? 'var(--text-muted)' : 'var(--accent)',
+                color: '#ffffff', border: 'none',
+                borderRadius: '8px', fontSize: '14px', fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+              }}
+            >
               {loading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', marginTop: '20px' }}>
+          <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-secondary)', marginTop: '20px' }}>
             Already have an account?{' '}
-            <Link href="/login" style={{ color: '#4f46e5', fontWeight: 500, textDecoration: 'none' }}>
+            <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 500, textDecoration: 'none' }}>
               Sign in
             </Link>
           </p>
