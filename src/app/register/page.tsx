@@ -4,25 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Car, Mail, Lock, User, Phone } from 'lucide-react';
+import { Mail, Lock, User, Phone, ArrowRight, Shield } from 'lucide-react';
 import api from '@/lib/axios';
-
-const inputStyle = {
-  width: '100%',
-  padding: '10px 12px 10px 38px',
-  borderRadius: '8px',
-  border: '1px solid var(--border-input)',
-  fontSize: '14px',
-  color: 'var(--text-primary)',
-  background: 'var(--bg-card)',
-  outline: 'none',
-  boxSizing: 'border-box' as const,
-};
 
 export default function RegisterPage() {
   const router = useRouter();
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
   const [loading, setLoading] = useState(false);
+  const [focused, setFocused] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,61 +27,133 @@ export default function RegisterPage() {
     }
   };
 
+  const inputWrap = (isFocused: boolean) => ({
+    position: 'relative' as const,
+    borderRadius: '10px',
+    border: `1.5px solid ${isFocused ? 'var(--accent)' : 'var(--border-input)'}`,
+    background: 'var(--bg-card)',
+    transition: 'border-color 0.15s, box-shadow 0.15s',
+    boxShadow: isFocused ? '0 0 0 3px var(--accent-light)' : 'none',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '0 14px',
+  });
+
+  const inputStyle = {
+    flex: 1,
+    padding: '12px 0',
+    border: 'none',
+    background: 'transparent',
+    fontSize: '15px',
+    color: 'var(--text-primary)',
+    outline: 'none',
+  };
+
   const fields = [
-    { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: <User size={15} color="var(--text-muted)" /> },
-    { key: 'email', label: 'Email', type: 'email', placeholder: 'you@kiit.ac.in', icon: <Mail size={15} color="var(--text-muted)" /> },
-    { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: <Phone size={15} color="var(--text-muted)" /> },
-    { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: <Lock size={15} color="var(--text-muted)" /> },
+    { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: User },
+    { key: 'email', label: 'KIIT Email', type: 'email', placeholder: '22XXXXXXX@kiit.ac.in', icon: Mail },
+    { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: Phone },
+    { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: Lock },
   ];
 
   return (
-    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ width: '100%', maxWidth: '400px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+    <div style={{
+      minHeight: '85vh',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '0',
+      alignItems: 'stretch',
+      margin: '0 -1.5rem',
+    }}>
+      {/* Left — branding */}
+      <div style={{
+        background: 'var(--accent)',
+        padding: '4rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        borderRadius: '0 0 0 16px',
+      }}>
+        <div>
           <div style={{
-            width: '48px', height: '48px',
-            background: 'var(--accent-light)',
-            borderRadius: '12px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 16px',
+            fontFamily: 'var(--font-display)',
+            fontSize: '28px', fontStyle: 'italic',
+            color: '#ffffff', marginBottom: '48px',
+            letterSpacing: '-0.02em',
           }}>
-            <Car size={24} color="var(--accent)" />
+            RideSync
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
-            Create your account
-          </h1>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
-            Join KIIT students on RideSync
+
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '44px', fontWeight: 400,
+            color: '#ffffff', lineHeight: 1.15,
+            marginBottom: '20px', letterSpacing: '-0.02em',
+          }}>
+            Join 1000s of<br />
+            <em style={{ color: '#bfdbfe' }}>KIIT students.</em>
+          </h2>
+
+          <p style={{ fontSize: '16px', color: '#bfdbfe', lineHeight: 1.7, maxWidth: '360px' }}>
+            Stop overpaying for solo cabs. Find batchmates, split the fare, and travel smarter every day.
           </p>
         </div>
 
-        <div style={{
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border)',
-          borderRadius: '16px',
-          padding: '32px',
-        }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {[
+            { emoji: '💸', text: 'Save up to 75% on cab fares' },
+            { emoji: '📱', text: 'Coordinate via WhatsApp instantly' },
+            { emoji: '🔒', text: 'Only verified KIIT students' },
+          ].map(({ emoji, text }) => (
+            <div key={text} style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: '10px', padding: '12px 16px',
+              border: '1px solid rgba(255,255,255,0.15)',
+            }}>
+              <span style={{ fontSize: '20px' }}>{emoji}</span>
+              <span style={{ fontSize: '14px', color: '#e0e7ff', fontWeight: 500 }}>{text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right — form */}
+      <div style={{
+        padding: '4rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        background: 'var(--bg-secondary)',
+      }}>
+        <div style={{ maxWidth: '360px', width: '100%', margin: '0 auto' }}>
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '32px', fontWeight: 400,
+            color: 'var(--text-primary)', marginBottom: '8px',
+            letterSpacing: '-0.02em',
+          }}>
+            Create account
+          </h1>
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '32px' }}>
+            Join RideSync with your KIIT email.
+          </p>
+
           <form onSubmit={handleSubmit}>
-            {fields.map(({ key, label, type, placeholder, icon }) => (
+            {fields.map(({ key, label, type, placeholder, icon: Icon }) => (
               <div key={key} style={{ marginBottom: '16px' }}>
-                <label style={{
-                  display: 'block', fontSize: '13px',
-                  fontWeight: 500, color: 'var(--text-secondary)',
-                  marginBottom: '6px',
-                }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '7px' }}>
                   {label}
                 </label>
-                <div style={{ position: 'relative' }}>
-                  <span style={{
-                    position: 'absolute', left: '12px',
-                    top: '50%', transform: 'translateY(-50%)',
-                  }}>
-                    {icon}
-                  </span>
+                <div style={inputWrap(focused === key)}>
+                  <Icon size={16} color={focused === key ? 'var(--accent)' : 'var(--text-muted)'} />
                   <input
                     type={type}
                     value={form[key as keyof typeof form]}
                     onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                    onFocus={() => setFocused(key)}
+                    onBlur={() => setFocused(null)}
                     style={inputStyle}
                     placeholder={placeholder}
                     required={key !== 'phone'}
@@ -101,31 +162,32 @@ export default function RegisterPage() {
               </div>
             ))}
 
-            <p style={{
-              fontSize: '12px', color: 'var(--text-muted)',
-              textAlign: 'center', marginBottom: '12px', marginTop: '4px',
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '7px',
+              padding: '10px 12px', background: 'var(--accent-light)',
+              borderRadius: '8px', marginBottom: '20px',
+              fontSize: '12px', color: 'var(--accent-text)',
             }}>
-              Only <strong style={{ color: 'var(--text-secondary)' }}>@kiit.ac.in</strong> emails are accepted
-            </p>
+              <Shield size={13} />
+              Only <strong>@kiit.ac.in</strong> emails are accepted
+            </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%', padding: '11px',
-                background: loading ? 'var(--text-muted)' : 'var(--accent)',
-                color: '#ffffff', border: 'none',
-                borderRadius: '8px', fontSize: '14px', fontWeight: 600,
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {loading ? 'Creating account...' : 'Create account'}
+            <button type="submit" disabled={loading} style={{
+              width: '100%', padding: '13px',
+              background: loading ? 'var(--text-muted)' : 'var(--accent)',
+              color: '#ffffff', border: 'none',
+              borderRadius: '10px', fontSize: '15px', fontWeight: 600,
+              cursor: loading ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'center', gap: '8px',
+            }}>
+              {loading ? 'Creating account...' : (<>Create account <ArrowRight size={17} /></>)}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-secondary)', marginTop: '20px' }}>
+          <p style={{ textAlign: 'center', fontSize: '14px', color: 'var(--text-secondary)', marginTop: '24px' }}>
             Already have an account?{' '}
-            <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 500, textDecoration: 'none' }}>
+            <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}>
               Sign in
             </Link>
           </p>
