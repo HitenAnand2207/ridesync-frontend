@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import toast from 'react-hot-toast';
 import { Mail, ArrowLeft, RefreshCw } from 'lucide-react';
 import api from '@/lib/axios';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || '';
@@ -61,7 +62,7 @@ export default function VerifyEmailPage() {
       toast.success('Email verified! Please login.');
       router.push('/login');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Verification failed');
+      toast.error(err?.response?.data?.message || 'Verification failed');
     } finally {
       setLoading(false);
     }
@@ -76,7 +77,7 @@ export default function VerifyEmailPage() {
       setOtp(['', '', '', '', '', '']);
       inputs.current[0]?.focus();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to resend OTP');
+      toast.error(err?.response?.data?.message || 'Failed to resend OTP');
     } finally {
       setResending(false);
     }
@@ -93,10 +94,7 @@ export default function VerifyEmailPage() {
           }}>
             <Mail size={26} color="var(--accent)" />
           </div>
-          <h1 style={{
-            fontSize: '24px', fontWeight: 700,
-            color: 'var(--text-primary)', marginBottom: '8px',
-          }}>
+          <h1 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
             Verify your email
           </h1>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -109,7 +107,6 @@ export default function VerifyEmailPage() {
           background: 'var(--bg-card)', border: '1px solid var(--border)',
           borderRadius: '16px', padding: '32px',
         }}>
-          {/* OTP inputs */}
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '28px' }}>
             {otp.map((digit, i) => (
               <input
@@ -145,7 +142,6 @@ export default function VerifyEmailPage() {
               fontSize: '14px', fontWeight: 600,
               cursor: otp.join('').length === 6 ? 'pointer' : 'not-allowed',
               marginBottom: '16px',
-              transition: 'all 0.15s',
             }}
           >
             {loading ? 'Verifying...' : 'Verify email'}
@@ -183,5 +179,13 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-muted)' }}>Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
