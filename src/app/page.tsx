@@ -48,8 +48,6 @@ const HeroIllustration = () => (
       <rect x="24" y="10" width="40" height="6" fill="#d1d5db" rx="3" />
       <rect x="24" y="18" width="28" height="4" fill="#e5e7eb" rx="2" />
     </g>
-    <text x="200" y="100" fontSize="16" opacity="0.3" fill="#6366f1">✦</text>
-    <text x="420" y="120" fontSize="12" opacity="0.25" fill="#6366f1">✦</text>
   </svg>
 );
 
@@ -75,7 +73,7 @@ export default function Home() {
             border: '1px solid var(--border)',
           }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
-            Built for KIIT University, Bhubaneswar
+            India&apos;s cab sharing platform
           </div>
 
           <h1 style={{
@@ -93,7 +91,7 @@ export default function Home() {
             fontSize: '17px', color: 'var(--text-secondary)',
             lineHeight: 1.75, marginBottom: '40px', maxWidth: '420px',
           }}>
-            Find KIIT batchmates heading the same way. Form a group, book one Ola or Uber, and split the cost — all coordinated via WhatsApp.
+            Find people heading your way. Form a group, book one Ola or Uber, and split the cost — coordinate instantly via Telegram.
           </p>
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -173,8 +171,8 @@ export default function Home() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '16px' }}>
           {[
             { icon: <MapPin size={20} color="var(--accent)" />, step: '01', title: 'Enter your route', desc: 'Tell us where you\'re going and when.' },
-            { icon: <Users size={20} color="var(--accent)" />, step: '02', title: 'Find your group', desc: 'We match you with batchmates going the same way.' },
-            { icon: <MessageCircle size={20} color="var(--accent)" />, step: '03', title: 'Coordinate on WhatsApp', desc: 'Group details and fare split sent instantly.' },
+            { icon: <Users size={20} color="var(--accent)" />, step: '02', title: 'Find your group', desc: 'We match you with people going the same way.' },
+            { icon: <MessageCircle size={20} color="var(--accent)" />, step: '03', title: 'Coordinate on Telegram', desc: 'Group details and fare split sent instantly.' },
             { icon: <Smartphone size={20} color="var(--accent)" />, step: '04', title: 'Book one cab', desc: 'Organizer opens Ola or Uber with destination pre-filled.' },
           ].map(({ icon, step, title, desc }) => (
             <div key={step} style={{
@@ -207,10 +205,10 @@ export default function Home() {
               fontSize: '28px', fontWeight: 400,
               color: '#ffffff', marginBottom: '10px',
             }}>
-              Holiday season rush? We've got you.
+              Holiday season rush? We&apos;ve got you.
             </h3>
             <p style={{ fontSize: '15px', color: '#bfdbfe', lineHeight: 1.6, maxWidth: '480px' }}>
-              Diwali break, semester end, exam season — when every student heads to the airport at the same time, RideSync makes coordination effortless.
+              Diwali break, New Year, long weekends — when everyone heads to the airport or railway station at the same time, RideSync makes coordination effortless.
             </p>
           </div>
           <Link href={user ? '/board' : '/register'} style={{

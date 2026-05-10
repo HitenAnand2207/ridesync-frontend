@@ -18,7 +18,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await api.post('/auth/register', form);
-      toast.success('Account created! Check your KIIT email for the OTP.');
+      toast.success('Account created! Check your email for the OTP.');
       router.push(`/verify-email?email=${encodeURIComponent(form.email)}`);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Registration failed');
@@ -52,7 +52,7 @@ export default function RegisterPage() {
 
   const fields = [
     { key: 'name', label: 'Full name', type: 'text', placeholder: 'Hiten Anand', icon: User },
-    { key: 'email', label: 'KIIT Email', type: 'email', placeholder: '22XXXXXXX@kiit.ac.in', icon: Mail },
+    { key: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com', icon: Mail },
     { key: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+91 98765 43210', icon: Phone },
     { key: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: Lock },
   ];
@@ -66,7 +66,6 @@ export default function RegisterPage() {
       alignItems: 'stretch',
       margin: '0 -1.5rem',
     }}>
-      {/* Left — branding */}
       <div style={{
         background: 'var(--accent)',
         padding: '4rem',
@@ -91,20 +90,20 @@ export default function RegisterPage() {
             color: '#ffffff', lineHeight: 1.15,
             marginBottom: '20px', letterSpacing: '-0.02em',
           }}>
-            Join 1000s of<br />
-            <em style={{ color: '#bfdbfe' }}>KIIT students.</em>
+            Share cabs<br />
+            <em style={{ color: '#bfdbfe' }}>across India.</em>
           </h2>
 
           <p style={{ fontSize: '16px', color: '#bfdbfe', lineHeight: 1.7, maxWidth: '360px' }}>
-            Stop overpaying for solo cabs. Find batchmates, split the fare, and travel smarter every day.
+            Stop overpaying for solo cabs. Find people heading your way, split the fare, and travel smarter.
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {[
             { emoji: '💸', text: 'Save up to 75% on cab fares' },
-            { emoji: '📱', text: 'Coordinate via WhatsApp instantly' },
-            { emoji: '🔒', text: 'Only verified KIIT students' },
+            { emoji: '📱', text: 'Coordinate via Telegram instantly' },
+            { emoji: '🔒', text: 'Verified users only' },
           ].map(({ emoji, text }) => (
             <div key={text} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
@@ -119,7 +118,6 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Right — form */}
       <div style={{
         padding: '4rem',
         display: 'flex',
@@ -137,7 +135,7 @@ export default function RegisterPage() {
             Create account
           </h1>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '32px' }}>
-            Join RideSync with your KIIT email.
+            Join RideSync and start sharing cabs.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -169,7 +167,7 @@ export default function RegisterPage() {
               fontSize: '12px', color: 'var(--accent-text)',
             }}>
               <Shield size={13} />
-              Only <strong>@kiit.ac.in</strong> emails are accepted
+              A verification code will be sent to your email
             </div>
 
             <button type="submit" disabled={loading} style={{
