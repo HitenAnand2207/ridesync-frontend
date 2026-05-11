@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface LocationDetectorProps {
   onCityDetected: (city: string) => void;
@@ -29,18 +30,21 @@ export default function LocationDetector({ onCityDetected }: LocationDetectorPro
       });
       const { latitude, longitude } = position.coords;
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+        { headers: { 'Accept-Language': 'en' } }
       );
       const data = await res.json();
-      if (data.results?.length > 0) {
-        const components = data.results[0].address_components;
-        const cityComponent = components.find((c: any) =>
-          c.types.includes('locality') || c.types.includes('administrative_area_level_2')
-        );
-        if (cityComponent) {
-          setCity(cityComponent.long_name);
-          onCityDetected(cityComponent.long_name);
-        }
+      const detectedCity =
+        data.address?.city ||
+        data.address?.town ||
+        data.address?.village ||
+        data.address?.state_district ||
+        '';
+      if (detectedCity) {
+        setCity(detectedCity);
+        onCityDetected(detectedCity);
+      } else {
+        toast.error('Could not detect city');
       }
     } catch {
       toast.error('Could not detect location');
@@ -105,5 +109,3 @@ export default function LocationDetector({ onCityDetected }: LocationDetectorPro
     </div>
   );
 }
-
-import toast from 'react-hot-toast';
