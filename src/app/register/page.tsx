@@ -9,12 +9,13 @@ import api from '@/lib/axios';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', gender: '' });
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.gender) { toast.error('Please select your gender'); return; }
     setLoading(true);
     try {
       await api.post('/auth/register', form);
@@ -34,20 +35,13 @@ export default function RegisterPage() {
     background: 'var(--bg-card)',
     transition: 'border-color 0.15s, box-shadow 0.15s',
     boxShadow: isFocused ? '0 0 0 3px var(--accent-light)' : 'none',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    padding: '0 14px',
+    display: 'flex', alignItems: 'center', gap: '10px', padding: '0 14px',
   });
 
   const inputStyle = {
-    flex: 1,
-    padding: '12px 0',
-    border: 'none',
-    background: 'transparent',
-    fontSize: '15px',
-    color: 'var(--text-primary)',
-    outline: 'none',
+    flex: 1, padding: '12px 0', border: 'none',
+    background: 'transparent', fontSize: '15px',
+    color: 'var(--text-primary)', outline: 'none',
   };
 
   const fields = [
@@ -59,57 +53,42 @@ export default function RegisterPage() {
 
   return (
     <div style={{
-      minHeight: '85vh',
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '0',
-      alignItems: 'stretch',
-      margin: '0 -1.5rem',
+      minHeight: '85vh', display: 'grid',
+      gridTemplateColumns: '1fr 1fr', gap: '0',
+      alignItems: 'stretch', margin: '0 -1.5rem',
     }}>
       <div style={{
-        background: 'var(--accent)',
-        padding: '4rem',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        borderRadius: '0 0 0 16px',
+        background: 'var(--accent)', padding: '4rem',
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'space-between', borderRadius: '0 0 0 16px',
       }}>
         <div>
           <div style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '28px', fontStyle: 'italic',
-            color: '#ffffff', marginBottom: '48px',
+            fontFamily: 'var(--font-display)', fontSize: '28px',
+            fontStyle: 'italic', color: '#ffffff', marginBottom: '48px',
             letterSpacing: '-0.02em',
-          }}>
-            RideSync
-          </div>
-
+          }}>RideSync</div>
           <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '44px', fontWeight: 400,
-            color: '#ffffff', lineHeight: 1.15,
-            marginBottom: '20px', letterSpacing: '-0.02em',
+            fontFamily: 'var(--font-display)', fontSize: '44px', fontWeight: 400,
+            color: '#ffffff', lineHeight: 1.15, marginBottom: '20px', letterSpacing: '-0.02em',
           }}>
             Share cabs<br />
             <em style={{ color: '#bfdbfe' }}>across India.</em>
           </h2>
-
           <p style={{ fontSize: '16px', color: '#bfdbfe', lineHeight: 1.7, maxWidth: '360px' }}>
             Stop overpaying for solo cabs. Find people heading your way, split the fare, and travel smarter.
           </p>
         </div>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {[
             { emoji: '💸', text: 'Save up to 75% on cab fares' },
             { emoji: '📱', text: 'Coordinate via Telegram instantly' },
-            { emoji: '🔒', text: 'Verified users only' },
+            { emoji: '🔒', text: 'Women-only groups available' },
           ].map(({ emoji, text }) => (
             <div key={text} style={{
               display: 'flex', alignItems: 'center', gap: '12px',
-              background: 'rgba(255,255,255,0.1)',
-              borderRadius: '10px', padding: '12px 16px',
-              border: '1px solid rgba(255,255,255,0.15)',
+              background: 'rgba(255,255,255,0.1)', borderRadius: '10px',
+              padding: '12px 16px', border: '1px solid rgba(255,255,255,0.15)',
             }}>
               <span style={{ fontSize: '20px' }}>{emoji}</span>
               <span style={{ fontSize: '14px', color: '#e0e7ff', fontWeight: 500 }}>{text}</span>
@@ -119,21 +98,14 @@ export default function RegisterPage() {
       </div>
 
       <div style={{
-        padding: '4rem',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        background: 'var(--bg-secondary)',
+        padding: '4rem', display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', background: 'var(--bg-secondary)',
       }}>
         <div style={{ maxWidth: '360px', width: '100%', margin: '0 auto' }}>
           <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '32px', fontWeight: 400,
-            color: 'var(--text-primary)', marginBottom: '8px',
-            letterSpacing: '-0.02em',
-          }}>
-            Create account
-          </h1>
+            fontFamily: 'var(--font-display)', fontSize: '32px', fontWeight: 400,
+            color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.02em',
+          }}>Create account</h1>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', marginBottom: '32px' }}>
             Join RideSync and start sharing cabs.
           </p>
@@ -160,6 +132,30 @@ export default function RegisterPage() {
               </div>
             ))}
 
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)', marginBottom: '7px' }}>
+                Gender
+              </label>
+              <select
+                value={form.gender}
+                onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                style={{
+                  width: '100%', padding: '12px 14px',
+                  border: '1.5px solid var(--border-input)',
+                  borderRadius: '10px', fontSize: '15px',
+                  color: form.gender ? 'var(--text-primary)' : 'var(--text-muted)',
+                  background: 'var(--bg-card)', outline: 'none',
+                }}
+                required
+              >
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+
             <div style={{
               display: 'flex', alignItems: 'center', gap: '7px',
               padding: '10px 12px', background: 'var(--accent-light)',
@@ -173,11 +169,10 @@ export default function RegisterPage() {
             <button type="submit" disabled={loading} style={{
               width: '100%', padding: '13px',
               background: loading ? 'var(--text-muted)' : 'var(--accent)',
-              color: '#ffffff', border: 'none',
-              borderRadius: '10px', fontSize: '15px', fontWeight: 600,
+              color: '#ffffff', border: 'none', borderRadius: '10px',
+              fontSize: '15px', fontWeight: 600,
               cursor: loading ? 'not-allowed' : 'pointer',
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'center', gap: '8px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             }}>
               {loading ? 'Creating account...' : (<>Create account <ArrowRight size={17} /></>)}
             </button>
