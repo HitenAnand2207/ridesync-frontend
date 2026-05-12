@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { reverseGeocodeCity } from '@/lib/location';
 
 interface LocationDetectorProps {
   onCityDetected: (city: string) => void;
@@ -29,17 +30,7 @@ export default function LocationDetector({ onCityDetected }: LocationDetectorPro
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
       const { latitude, longitude } = position.coords;
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
-        { headers: { 'Accept-Language': 'en' } }
-      );
-      const data = await res.json();
-      const detectedCity =
-        data.address?.city ||
-        data.address?.town ||
-        data.address?.village ||
-        data.address?.state_district ||
-        '';
+      const detectedCity = await reverseGeocodeCity(latitude, longitude);
       if (detectedCity) {
         setCity(detectedCity);
         onCityDetected(detectedCity);

@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Car, LogOut, User, Plus, Search, BookOpen, Sun, Moon, Zap } from 'lucide-react';
+import { Car, LogOut, User, Plus, Search, BookOpen, Sun, Moon, Zap, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, userCity } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [dark, setDark] = useState(false);
@@ -72,6 +72,20 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           {user && (
             <>
+              {userCity && (
+                <Link href="/profile" style={{
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                  padding: '5px 10px', borderRadius: '8px',
+                  fontSize: '13px', fontWeight: 500,
+                  color: 'var(--text-secondary)', textDecoration: 'none',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border)',
+                  marginRight: '4px',
+                }}>
+                  <MapPin size={13} color="var(--accent)" />
+                  {userCity}
+                </Link>
+              )}
               {navLink('/board', <Zap size={14} />, 'Live board')}
               {navLink('/groups/search', <Search size={14} />, 'Find group')}
               {navLink('/groups/create', <Plus size={14} />, 'Start group')}

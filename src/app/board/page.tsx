@@ -72,11 +72,6 @@ export default function LiveBoardPage() {
   useEffect(() => { fetchGroups(); }, [fetchGroups]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('userCity');
-    if (saved) setUserCity(saved);
-  }, []);
-
-  useEffect(() => {
     const interval = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) { fetchGroups(true); return REFRESH_INTERVAL; }
@@ -134,7 +129,11 @@ export default function LiveBoardPage() {
           </div>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)' }}>
             All active groups — refreshes in <strong style={{ color: 'var(--text-primary)' }}>{countdown}s</strong>
-            {userCity && <span style={{ marginLeft: '8px', color: 'var(--accent)' }}>📍 {userCity}</span>}
+            {userCity && (
+              <span style={{ marginLeft: '10px', color: 'var(--accent)', fontSize: '13px' }}>
+                📍 {userCity}
+              </span>
+            )}
           </p>
         </div>
         <button onClick={() => fetchGroups(true)} disabled={refreshing} style={{
@@ -148,10 +147,7 @@ export default function LiveBoardPage() {
         </button>
       </div>
 
-      <LocationDetector onCityDetected={(city) => {
-        setUserCity(city);
-        localStorage.setItem('userCity', city);
-      }} />
+      <LocationDetector onCityDetected={(city) => setUserCity(city)} />
 
       <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', flexWrap: 'wrap' }}>
         {destinations.map(dest => (
