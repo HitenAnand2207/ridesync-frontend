@@ -101,7 +101,7 @@ export default function LoginPage() {
             lineHeight: 1.7,
             maxWidth: '360px',
           }}>
-            Find KIIT batchmates heading the same way and split the Ola or Uber fare effortlessly.
+            Find people heading the same way and split the Ola or Uber fare effortlessly.
           </p>
         </div>
 
@@ -145,7 +145,7 @@ export default function LoginPage() {
                   onFocus={() => setFocused('email')}
                   onBlur={() => setFocused(null)}
                   style={inputStyle}
-                  placeholder="you@kiit.ac.in"
+                  placeholder="you@example.com"
                   required
                 />
               </div>

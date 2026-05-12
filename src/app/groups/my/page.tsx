@@ -62,7 +62,7 @@ export default function MyGroupsPage() {
       {groups.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '16px' }}>
           <p style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: 500 }}>No groups yet</p>
-          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px' }}>Start a group and split the cab fare with batchmates.</p>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px' }}>Start a group and split the cab fare with people nearby.</p>
           <Link href="/groups/create" style={{ padding: '10px 20px', background: 'var(--accent)', color: '#fff', borderRadius: '8px', textDecoration: 'none', fontSize: '14px', fontWeight: 600 }}>
             Start a group
           </Link>

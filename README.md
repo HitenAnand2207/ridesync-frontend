@@ -1,11 +1,11 @@
 # RideSync Frontend
 
-RideSync is a campus ride-sharing platform built for KIIT University students. It lets students offer empty seats on their planned trips and find rides that match their route, saving money and reducing solo travel. The frontend is a Next.js 14 application that communicates with the RideSync REST API.
+RideSync is a cab-sharing platform for commuters and travelers across India. It lets users create ride groups, find people heading the same way, split cab fares, and coordinate updates through the RideSync REST API.
 
 ## Features
 
 - **Smart Ride Matching**: Search for rides by origin, destination, date and seats needed. Each result gets a match score (0–100) based on text similarity, geographic proximity, departure time closeness and seat availability — so the best rides always appear first.
-- **Offer a Ride**: Drivers can list rides with origin, destination, departure time, available seats and price per seat. The ride is instantly searchable by other students.
+- **Offer a Ride**: Drivers can list rides with origin, destination, departure time, available seats and price per seat. The ride is instantly searchable by other users.
 - **Book a Seat**: Passengers can book one or more seats on any active ride. The system prevents double-booking, blocks drivers from booking their own rides, and atomically decrements available seats to avoid race conditions.
 - **My Rides**: Drivers can view all rides they have offered, see booking counts, and cancel active rides.
 - **My Bookings**: Passengers can view all their bookings with ride details and driver contact info, and cancel confirmed bookings.

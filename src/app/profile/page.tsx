@@ -13,6 +13,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [connectCode, setConnectCode] = useState<string | null>(null);
   const [telegramLink, setTelegramLink] = useState<string | null>(null);
+  const [telegramBotUsername, setTelegramBotUsername] = useState('RideSyncBot');
   const [connected, setConnected] = useState(false);
   const [loadingTelegram, setLoadingTelegram] = useState(false);
   const [editingCity, setEditingCity] = useState(false);
@@ -28,6 +29,7 @@ export default function ProfilePage() {
       const res = await api.get('/auth/telegram-link');
       setConnectCode(res.data.code);
       setTelegramLink(res.data.link);
+      setTelegramBotUsername(res.data.botUsername || 'RideSyncBot');
     } catch {
       toast.error('Failed to get connect code');
     } finally {
@@ -290,7 +292,7 @@ export default function ProfilePage() {
             ) : (
               <div>
                 <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px', lineHeight: 1.6 }}>
-                  Open <a href={telegramLink!} target="_blank" rel="noreferrer" style={{ color: '#0088cc', fontWeight: 600 }}>@RideSyncKIITBot</a> on Telegram and send:
+                  Open <a href={telegramLink!} target="_blank" rel="noreferrer" style={{ color: '#0088cc', fontWeight: 600 }}>@{telegramBotUsername}</a> on Telegram and send:
                 </p>
                 <div style={{
                   background: 'var(--bg-card)', border: '1px solid var(--border)',

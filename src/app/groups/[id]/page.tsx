@@ -270,7 +270,7 @@ export default function GroupDetailPage() {
               padding: '14px', background: 'var(--accent-light)',
               borderRadius: '10px', fontSize: '14px', color: 'var(--accent-text)',
             }}>
-              You created this group. Share the link with batchmates or let them find it through search.
+              You created this group. Share the link with others or let them find it through search.
             </div>
           )}
 
